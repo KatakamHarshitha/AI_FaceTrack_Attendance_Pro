@@ -4,5 +4,6 @@ __pycache__/
 .env
 *.db
 dataset/
+face_model.yml
 encodings/
 .vscode/

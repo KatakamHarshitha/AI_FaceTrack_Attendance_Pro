@@ -1,5 +1,5 @@
 import cv2
-
+import requests
 
 recognizer = cv2.face.LBPHFaceRecognizer_create()
 recognizer.read("face_model.yml")
@@ -9,6 +9,7 @@ face_detector = cv2.CascadeClassifier(
 )
 
 camera = cv2.VideoCapture(0)
+recognized_user = None
 
 while True:
     success, frame = camera.read()
@@ -29,6 +30,9 @@ while True:
         face = gray[y:y + height, x:x + width]
 
         user_id, confidence = recognizer.predict(face)
+        if confidence < 70:
+            recognized_user = user_id
+
 
         cv2.rectangle(
             frame,
@@ -55,3 +59,10 @@ while True:
 
 camera.release()
 cv2.destroyAllWindows()
+print("Recognized user:", recognized_user)
+if recognized_user:
+    response = requests.post(
+        f"http://127.0.0.1:5000/api/attendance/{recognized_user}"
+    )
+
+    print(response.json())

@@ -1,31 +1,41 @@
 # AI FaceTrack Attendance Pro
 
-AI-powered smart attendance system using Python, Flask, SQL, OpenCV, REST API, Pytest, Docker, and Git.
+AI-powered smart attendance system built using Python, Flask, OpenCV, and SQLite.
 
-## Project Status
-
-🚧 Project is currently under development.
-
-## Planned Features
+## Features
 
 - User registration
-- Face detection
-- Face recognition
-- Automatic attendance
-- SQL database
+- User listing
+- Webcam-based face detection
+- Face recognition using OpenCV LBPH
+- Automatic attendance marking
+- SQLite database
 - REST APIs
-- Authentication
-- Automated testing
-- Docker containerization
+- Automated API testing with Pytest
 
 ## Technologies
 
-- Python
+- Python 3.11
 - Flask
-- SQL
+- Flask-SQLAlchemy
+- SQLite
 - OpenCV
-- Face Recognition
-- REST API
+- NumPy
+- Requests
 - Pytest
-- Docker
-- Git/GitHub
+- Git & GitHub
+
+## How It Works
+
+```text
+Webcam
+   ↓
+Face Detection
+   ↓
+Face Recognition
+   ↓
+User Identification
+   ↓
+Attendance API
+   ↓
+SQLite Database

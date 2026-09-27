@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, jsonify
 from datetime import datetime
 from database import db, User, Attendance
+from face_recognition_service import capture_faces, train_recognizer
 
 app = Flask(__name__)
 
@@ -16,8 +17,21 @@ db.init_app(app)
 def home():
     return render_template("index.html")
 
+@app.route("/api/capture/<int:user_id>", methods=["POST"])
+def capture_user_face(user_id):
+    capture_faces(user_id)
 
+    return jsonify({
+        "message": "Face images captured successfully",
+        "user_id": user_id
+    })
+@app.route("/api/train", methods=["POST"])
+def train_model():
+    train_recognizer()
 
+    return jsonify({
+        "message": "Face recognition model trained successfully"
+    })
 @app.route("/api/users", methods=["POST"])
 def create_user():
     data = request.get_json()
