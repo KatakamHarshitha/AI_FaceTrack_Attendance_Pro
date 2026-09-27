@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, jsonify
-from database import db,User
+from datetime import datetime
+from database import db, User, Attendance
 
 app = Flask(__name__)
 
@@ -50,6 +51,44 @@ def get_users():
             "email": user.email
         }
         for user in users
+    ])
+@app.route("/api/attendance/<int:user_id>", methods=["POST"])
+def mark_attendance(user_id):
+    user = User.query.get(user_id)
+
+    if not user:
+        return jsonify({"error": "User not found"}), 404
+
+    now = datetime.now()
+
+    attendance = Attendance(
+        user_id=user.id,
+        date=now.strftime("%Y-%m-%d"),
+        time=now.strftime("%H:%M:%S")
+    )
+
+    db.session.add(attendance)
+    db.session.commit()
+
+    return jsonify({
+        "message": "Attendance marked successfully",
+        "user_id": user.id,
+        "name": user.name,
+        "date": attendance.date,
+        "time": attendance.time
+    }), 201
+@app.route("/api/attendance", methods=["GET"])
+def get_attendance():
+    records = Attendance.query.all()
+
+    return jsonify([
+        {
+            "id": record.id,
+            "user_id": record.user_id,
+            "date": record.date,
+            "time": record.time
+        }
+        for record in records
     ])
 
 if __name__ == "__main__":
